@@ -58,7 +58,6 @@ public class LinkedList<T extends Comparable<T>> {
                 return true;
             } else {
                 System.out.println("Item not found.");
-                return false;
             }
         }
         return false;
