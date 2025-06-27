@@ -1,6 +1,6 @@
 package Book.LinkedLists;
 
-public class LinkedList<T> {
+public class LinkedList<T extends Comparable<T>> {
     Node<T> start;
     Node<T> currentNode;
 
@@ -32,16 +32,34 @@ public class LinkedList<T> {
         }
     }
 
-    public boolean search(T data) {
+    public boolean search(T item) {
         Node<T> i = start;
         int count = 0;
         while (i != null) {
             count++;
-            if (i.data == data) {
+            if (item.compareTo(i.data) == 0) {
                 System.out.println(i.data + " present at node " + count);
                 return true;
             }
             i = i.nextNode;
+        }
+        return false;
+    }
+
+    public boolean searchSorted(T item) {
+        Node<T> i = start;
+        int count = 0;
+        while (i != null) {
+            count++;
+            if (item.compareTo(i.data) > 0) {
+                i = i.nextNode;
+            } else if (item.compareTo(i.data) == 0) {
+                System.out.println(i.data + " present at node " + count);
+                return true;
+            } else {
+                System.out.println("Item not found.");
+                return false;
+            }
         }
         return false;
     }

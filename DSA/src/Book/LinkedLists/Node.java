@@ -1,6 +1,6 @@
 package Book.LinkedLists;
 
-class Node<T> {
+class Node<T extends Comparable<T>> {
     T data;
     Node<T> nextNode;
 
