@@ -10,12 +10,56 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     public void add(T data) {
-        if (start == null) {
-            this.start = new Node<T>(data, null);
-            this.currentNode = start;
+        if (this.start == null) {
+            this.start = new Node<>(data, null);
+            this.currentNode = this.start;
         } else {
-            this.currentNode.nextNode = new Node<T>(data, null);
+            this.start = new Node<>(data, this.start);
+        }
+    }
+
+    public void add(T data, int node) {
+        if (this.start == null) {
+            this.start = new Node<>(data, null);
+            this.currentNode = this.start;
+        } else {
+            int count = 0;
+            Node<T> i = this.start;
+            while (count < node) {
+                count++;
+                i = i.nextNode;
+            }
+            i.nextNode = new Node<>(data, i.nextNode);
+        }
+    }
+
+    public void addEnd(T data) {
+        if (this.start == null) {
+            this.start = new Node<>(data, null);
+            this.currentNode = this.start;
+        } else {
+            this.currentNode.nextNode = new Node<>(data, null);
             this.currentNode = this.currentNode.nextNode;
+        }
+    }
+
+    public void addSorted(T data) {
+        if (this.start == null) {
+            add(data);
+        } else if (data.compareTo(start.data) < 0) {
+            add(data); // add new node with `data` at the start
+        } else {
+            Node<T> i = this.start;
+            Node<T> prev = null;
+            while (data.compareTo(i.data) > 0) {
+                prev = i;
+                if (i.nextNode == null) { // handles the edge case
+                    break;
+                }
+                i = i.nextNode;
+            }
+            assert prev != null; // although `prev == null` will never become true, but this line is added just for safety
+            prev.nextNode = new Node<>(data, prev.nextNode);
         }
     }
 
@@ -33,8 +77,8 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     public boolean search(T item) {
-        Node<T> i = start;
-        int count = 0;
+        Node<T> i = this.start;
+        int count = -1;
         while (i != null) {
             count++;
             if (item.compareTo(i.data) == 0) {
@@ -47,8 +91,8 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     public boolean searchSorted(T item) {
-        Node<T> i = start;
-        int count = 0;
+        Node<T> i = this.start;
+        int count = -1;
         while (i != null) {
             count++;
             if (item.compareTo(i.data) > 0) {
