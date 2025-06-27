@@ -63,6 +63,53 @@ public class LinkedList<T extends Comparable<T>> {
         }
     }
 
+    public T deleteNode(int index) {
+        T data;
+        if (this.start == null) { // list is empty
+            System.out.println("Error: UNDERFLOW");
+            return null;
+        } else if (this.start.nextNode == null) { // list has only one node
+            data = this.start.data;
+            this.start = null;
+            return data;
+        } else {
+            Node<T> i = this.start, previous = null;
+            int count = 0;
+            while (count < index) {
+                previous = i;
+                i = i.nextNode;
+                count++;
+            }
+            data = i.data;
+            assert previous != null;
+            previous.nextNode = i.nextNode;
+            return data;
+        }
+    }
+
+    public T deleteItem(T item) {
+        T data;
+        if (this.start == null) {
+            System.out.println("Error: UNDERFLOW");
+            return null;
+        } else if (this.start.nextNode == null) {
+            data = this.start.data;
+            this.start = null;
+            return data;
+        } else {
+            Node<T> previous = null;
+            Node<T> i = this.start;
+            while (item.compareTo(i.data) != 0) {
+                previous = i;
+                i = i.nextNode;
+            }
+            data    = i.data;
+            assert previous != null;
+            previous.nextNode = i.nextNode;
+            return data;
+        }
+    }
+
     public void printList() {
         Node<T> i = this.start;
         while (i != null) {
@@ -76,21 +123,21 @@ public class LinkedList<T extends Comparable<T>> {
         }
     }
 
-    public boolean search(T item) {
+    public int search(T item) {
         Node<T> i = this.start;
         int count = -1;
         while (i != null) {
             count++;
             if (item.compareTo(i.data) == 0) {
                 System.out.println(i.data + " present at node " + count);
-                return true;
+                return count;
             }
             i = i.nextNode;
         }
-        return false;
+        return -1;
     }
 
-    public boolean searchSorted(T item) {
+    public int searchSorted(T item) {
         Node<T> i = this.start;
         int count = -1;
         while (i != null) {
@@ -99,11 +146,12 @@ public class LinkedList<T extends Comparable<T>> {
                 i = i.nextNode;
             } else if (item.compareTo(i.data) == 0) {
                 System.out.println(i.data + " present at node " + count);
-                return true;
+                return count;
             } else {
                 System.out.println("Item not found.");
+                return -1;
             }
         }
-        return false;
+        return -1;
     }
 }
