@@ -1,8 +1,11 @@
 package Book.Stack;
 
+import Book.LinkedLists.LinkedList;
+
 public class Stack<T extends Comparable<T>> {
     private final int max;
     private final T[] stack;
+    private final LinkedList<T> linkedStack;
     private int top;
 
     @SuppressWarnings("unchecked")
@@ -10,31 +13,60 @@ public class Stack<T extends Comparable<T>> {
         this.max = max;
         this.stack = (T[]) new Comparable[max];
         this.top = -1;
+        this.linkedStack = null;
+    }
+
+    public Stack() {
+        this.max = -1;
+        this.stack = null;
+        this.linkedStack = new LinkedList<>();
     }
 
     public void push(T item) {
-        if (this.top == max - 1) {
-            System.out.println("Error: STACK OVERFLOW");
+        if (this.stack == null) {
+            assert this.linkedStack != null;
+            this.linkedStack.add(item);
         } else {
-            this.top++;
-            this.stack[top] = item;
+            if (this.top == max - 1) {
+                System.out.println("Error: STACK OVERFLOW");
+            } else {
+                this.top++;
+                this.stack[top] = item;
+            }
         }
+
     }
 
     public void pop() {
-        if (this.top == -1) {
-            System.out.println("Error: STACK UNDERFLOW");
+        if (this.stack == null) {
+            T item;
+            assert this.linkedStack != null;
+            if ((item = this.linkedStack.deleteNode(0)) != null) {
+                System.out.println(item);
+            } else {
+                System.out.println("Error: STACK UNDERFLOW");
+            }
         } else {
-            System.out.println(this.stack[top]);
-            this.top--;
+            if (this.top == -1) {
+                System.out.println("Error: STACK UNDERFLOW");
+            } else {
+                System.out.println(this.stack[top]);
+                this.top--;
+            }
         }
     }
 
     public void peek() {
-        if (this.top == -1){
-            System.out.println("Error: STACK UNDERFLOW");
+        if (this.stack == null) {
+            T item = this.linkedStack.deleteNode(0);
+            System.out.println(item);
+            this.linkedStack.add(item);
         } else {
-            System.out.println(this.stack[top]);
+            if (this.top == -1) {
+                System.out.println("Error: STACK UNDERFLOW");
+            } else {
+                System.out.println(this.stack[top]);
+            }
         }
     }
 }

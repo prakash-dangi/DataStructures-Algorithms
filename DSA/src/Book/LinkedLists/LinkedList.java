@@ -9,7 +9,7 @@ public class LinkedList<T extends Comparable<T>> {
         this.currentNode = null;
     }
 
-    public void add(T data) {
+    public void add(T data) { // Add items at the start of the list
         if (this.start == null) {
             this.start = new Node<>(data, null);
             this.currentNode = this.start;
