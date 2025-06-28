@@ -68,9 +68,13 @@ public class LinkedList<T extends Comparable<T>> {
         if (this.start == null) { // list is empty
             System.out.println("Error: UNDERFLOW");
             return null;
-        } else if (this.start.nextNode == null) { // list has only one node
+        } else if (this.start.nextNode == null || index == -1 || index == -2) { // list has only one node
             data = this.start.data;
-            this.start = null;
+            if (index != -1 && index != -2) {
+                this.start = null;
+            } else if (index == -2) {
+                this.start = this.start.nextNode;
+            }
             return data;
         } else {
             Node<T> i = this.start, previous = null;

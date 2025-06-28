@@ -41,7 +41,7 @@ public class Stack<T extends Comparable<T>> {
         if (this.stack == null) {
             T item;
             assert this.linkedStack != null;
-            if ((item = this.linkedStack.deleteNode(0)) != null) {
+            if ((item = this.linkedStack.deleteNode(-2)) != null) {
                 System.out.println(item);
             } else {
                 System.out.println("Error: STACK UNDERFLOW");
@@ -58,15 +58,15 @@ public class Stack<T extends Comparable<T>> {
 
     public void peek() {
         if (this.stack == null) {
-            T item = this.linkedStack.deleteNode(0);
+            assert this.linkedStack != null;
+            T item = this.linkedStack.deleteNode(-1);
             System.out.println(item);
-            this.linkedStack.add(item);
         } else {
-            if (this.top == -1) {
-                System.out.println("Error: STACK UNDERFLOW");
-            } else {
-                System.out.println(this.stack[top]);
-            }
+        if (this.top == -1){
+            System.out.println("Error: STACK UNDERFLOW");
+        } else {
+            System.out.println(this.stack[top]);
+        }
         }
     }
 }
