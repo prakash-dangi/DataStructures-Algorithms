@@ -2,6 +2,8 @@ package Book.Stack;
 
 import Book.LinkedLists.LinkedList;
 
+import java.util.EmptyStackException;
+
 public class Stack<T extends Comparable<T>> {
     private final int max;
     private final T[] stack;
@@ -28,7 +30,7 @@ public class Stack<T extends Comparable<T>> {
             this.linkedStack.add(item);
         } else {
             if (this.top == max - 1) {
-                System.out.println("Error: STACK OVERFLOW");
+                throw new StackOverflowError();
             } else {
                 this.top++;
                 this.stack[top] = item;
@@ -37,36 +39,54 @@ public class Stack<T extends Comparable<T>> {
 
     }
 
-    public void pop() {
+    public T pop() {
+        T item;
         if (this.stack == null) {
-            T item;
             assert this.linkedStack != null;
             if ((item = this.linkedStack.deleteNode(-2)) != null) {
-                System.out.println(item);
+                return item;
             } else {
-                System.out.println("Error: STACK UNDERFLOW");
+                throw new EmptyStackException();
             }
         } else {
             if (this.top == -1) {
-                System.out.println("Error: STACK UNDERFLOW");
+                throw new EmptyStackException();
             } else {
-                System.out.println(this.stack[top]);
+                item = this.stack[top];
                 this.top--;
+                return item;
             }
         }
     }
 
-    public void peek() {
+    public T peek() {
         if (this.stack == null) {
             assert this.linkedStack != null;
-            T item = this.linkedStack.deleteNode(-1);
-            System.out.println(item);
+            return this.linkedStack.deleteNode(-1);
         } else {
-        if (this.top == -1){
-            System.out.println("Error: STACK UNDERFLOW");
-        } else {
-            System.out.println(this.stack[top]);
+            if (this.top == -1) {
+                throw new EmptyStackException();
+            } else {
+                return this.stack[top];
+            }
         }
+    }
+
+    public boolean isEmpty() {
+        if (this.stack == null) {
+            assert linkedStack != null;
+            try {
+                this.linkedStack.deleteNode(-1);
+            } catch (EmptyStackException e) {
+                return true;
+            }
+            return false;
+        } else {
+            if (this.top == -1) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }

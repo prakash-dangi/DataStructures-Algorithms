@@ -1,5 +1,7 @@
 package Book.LinkedLists;
 
+import java.util.EmptyStackException;
+
 public class LinkedList<T extends Comparable<T>> {
     Node<T> start;
     Node<T> currentNode;
@@ -66,8 +68,7 @@ public class LinkedList<T extends Comparable<T>> {
     public T deleteNode(int index) {
         T data;
         if (this.start == null) { // list is empty
-            System.out.println("Error: UNDERFLOW");
-            return null;
+            throw new EmptyStackException();
         } else if (this.start.nextNode == null || index == -1 || index == -2) { // list has only one node
             data = this.start.data;
             if (index != -1 && index != -2) {
