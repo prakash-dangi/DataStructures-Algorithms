@@ -1,14 +1,21 @@
 package Book.Stack;
 
-import java.util.*;
+import java.util.Set;
 
+/**
+ * Converts an infix expression to postfix (Reverse Polish Notation).
+ */
 public class PolishNotation {
+    /**
+     * Converts an infix expression to postfix.
+     * Supports single-digit operands and operators: +, -, *, /, ^ with parentheses.
+     */
     public static String toPostfix(String exp) {
-        Stack<Character> stack = new Stack<>();
+        Stack<Character> stack = new ArrayStack<>(exp.length());
         StringBuilder output = new StringBuilder();
         Set<Character> operators = Set.of('+', '-', '*', '/', '^');
 
-        exp = exp.replaceAll("\\s", "");
+        exp = exp.replaceAll("\\s", ""); // remove whitespace
 
         for (char c : exp.toCharArray()) {
             if (Character.isLetterOrDigit(c)) {
@@ -20,13 +27,13 @@ public class PolishNotation {
                     output.append(stack.pop());
                 }
                 if (!stack.isEmpty() && stack.peek() == '(') {
-                    stack.pop();
+                    stack.pop(); // remove '(' from stack
                 } else {
                     throw new IllegalArgumentException("Mismatched parentheses");
                 }
             } else if (operators.contains(c)) {
                 while (!stack.isEmpty() && precedence(stack.peek()) >= precedence(c)) {
-                    if (c == '^' && stack.peek() == '^') break;
+                    if (c == '^' && stack.peek() == '^') break; // exponentiation is right associative
                     output.append(stack.pop());
                 }
                 stack.push(c);
@@ -34,15 +41,19 @@ public class PolishNotation {
         }
 
         while (!stack.isEmpty()) {
-            if (stack.peek() == '(' || stack.peek() == ')') {
+            char top = stack.pop();
+            if (top == '(' || top == ')') {
                 throw new IllegalArgumentException("Mismatched parentheses");
             }
-            output.append(stack.pop());
+            output.append(top);
         }
 
         return output.toString();
     }
 
+    /**
+     * Returns operator precedence.
+     */
     private static int precedence(char op) {
         return switch (op) {
             case '+', '-' -> 1;

@@ -4,7 +4,7 @@ import Book.LinkedLists.LinkedList;
 
 import java.util.EmptyStackException;
 
-public class LinkedStack<T extends Comparable<T>> {
+public class LinkedStack<T extends Comparable<T>> implements Stack<T> {
     private final LinkedList<T> list;
 
     public LinkedStack() {
