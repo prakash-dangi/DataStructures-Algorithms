@@ -1,162 +1,142 @@
 package Book.LinkedLists;
 
-import java.util.EmptyStackException;
+import java.util.NoSuchElementException;
 
 public class LinkedList<T extends Comparable<T>> {
-    Node<T> start;
-    Node<T> currentNode;
+    Node<T> head;
+    Node<T> tail;
 
     public LinkedList() {
-        this.start = null;
-        this.currentNode = null;
+        this.head = null;
     }
 
-    public void add(T data) { // Add items at the start of the list
-        if (this.start == null) {
-            this.start = new Node<>(data, null);
-            this.currentNode = this.start;
-        } else {
-            this.start = new Node<>(data, this.start);
-        }
+    public void addStart(T data) { // Add items at the head of the list
+        head = new Node<>(data, head);
     }
 
-    public void add(T data, int node) {
-        if (this.start == null) {
-            this.start = new Node<>(data, null);
-            this.currentNode = this.start;
-        } else {
-            int count = 0;
-            Node<T> i = this.start;
-            while (count < node) {
-                count++;
-                i = i.nextNode;
-            }
-            i.nextNode = new Node<>(data, i.nextNode);
+    public void addAt(T data, int index) {
+        if (index < 0) throw new IndexOutOfBoundsException("Negative index");
+        if (index == 0) {
+            addStart(data);
+            return;
         }
+        Node<T> current = this.head;
+        for (int i = 0; i < index - 1; i++) {
+            if (current == null) throw new IndexOutOfBoundsException("Index too large");
+            current = current.next;
+        }
+        current.next = new Node<>(data, current.next);
     }
 
     public void addEnd(T data) {
-        if (this.start == null) {
-            this.start = new Node<>(data, null);
-            this.currentNode = this.start;
-        } else {
-            this.currentNode.nextNode = new Node<>(data, null);
-            this.currentNode = this.currentNode.nextNode;
+        if (this.isEmpty()) {
+            head = new Node<>(data, null);
+            return;
         }
+        Node<T> current = head;
+        while (current.next != null) {
+            current = current.next;
+        }
+        current.next = new Node<>(data, null);
     }
 
     public void addSorted(T data) {
-        if (this.start == null) {
-            add(data);
-        } else if (data.compareTo(start.data) < 0) {
-            add(data); // add new node with `data` at the start
-        } else {
-            Node<T> i = this.start;
-            Node<T> prev = null;
-            while (data.compareTo(i.data) > 0) {
-                prev = i;
-                if (i.nextNode == null) { // handles the edge case
-                    break;
-                }
-                i = i.nextNode;
-            }
-            assert prev != null; // although `prev == null` will never become true, but this line is added just for safety
-            prev.nextNode = new Node<>(data, prev.nextNode);
+        if (isEmpty() || data.compareTo(head.data) < 0) {
+            addStart(data);
+            return;
         }
+        Node<T> prev = null, current = head;
+        while (current != null && data.compareTo(current.data) > 0) {
+            prev = current;
+            current = current.next;
+        }
+        assert prev != null;
+        prev.next = new Node<>(data, current);
     }
 
-    public T deleteNode(int index) {
-        T data;
-        if (this.start == null) { // list is empty
-            throw new EmptyStackException();
-        } else if (this.start.nextNode == null || index == -1 || index == -2) { // list has only one node
-            data = this.start.data;
-            if (index != -1 && index != -2) {
-                this.start = null;
-            } else if (index == -2) {
-                this.start = this.start.nextNode;
-            }
-            return data;
-        } else {
-            Node<T> i = this.start, previous = null;
-            int count = 0;
-            while (count < index) {
-                previous = i;
-                i = i.nextNode;
-                count++;
-            }
-            data = i.data;
-            assert previous != null;
-            previous.nextNode = i.nextNode;
+    public T deleteAt(int index) {
+        if (isEmpty()) throw new IndexOutOfBoundsException("Empty list");
+        if (index < 0) throw new IndexOutOfBoundsException("Negative index");
+        if (index == 0) {
+            T data = head.data;
+            head = head.next;
             return data;
         }
+
+        Node<T> current = head;
+        for (int i = 0; i < index - 1; i++) {
+            if (current == null) throw new IndexOutOfBoundsException("Index too large");
+            current = current.next;
+        }
+
+        if (current.next == null) throw new IndexOutOfBoundsException("Index too large");
+
+        T data = current.next.data;
+        current.next = current.next.next;
+        return data;
     }
 
-    public T deleteItem(T item) {
-        T data;
-        if (this.start == null) {
-            System.out.println("Error: UNDERFLOW");
-            return null;
-        } else if (this.start.nextNode == null) {
-            data = this.start.data;
-            this.start = null;
-            return data;
-        } else {
-            Node<T> previous = null;
-            Node<T> i = this.start;
-            while (item.compareTo(i.data) != 0) {
-                previous = i;
-                i = i.nextNode;
-            }
-            data    = i.data;
-            assert previous != null;
-            previous.nextNode = i.nextNode;
-            return data;
+    public boolean deleteItem(T item) {
+        if (isEmpty()) throw new NoSuchElementException("Empty list");
+
+        if (item.equals(head.data)) {
+            head = head.next;
+            return true;
         }
+
+        Node<T> prev = null, current = head;
+        while (current != null && !item.equals(current.data)) {
+            prev = current;
+            current = current.next;
+        }
+
+        if (current == null) return false;
+
+        assert prev != null;
+        prev.next = current.next;
+        return true;
     }
 
-    public void printList() {
-        Node<T> i = this.start;
-        while (i != null) {
-            if (i.nextNode == null) {
-                System.out.println(i.data);
-                i = i.nextNode;
-            } else {
-                System.out.print(i.data + " -> ");
-                i = i.nextNode;
-            }
-        }
+    public T getFirst() {
+        if (isEmpty()) throw new NoSuchElementException("Empty list");
+        return head.data;
     }
 
     public int search(T item) {
-        Node<T> i = this.start;
-        int count = -1;
-        while (i != null) {
-            count++;
-            if (item.compareTo(i.data) == 0) {
-                System.out.println(i.data + " present at node " + count);
-                return count;
-            }
-            i = i.nextNode;
+        Node<T> current = head;
+        int index = 0;
+        while (current != null) {
+            if (item.equals(current.data)) return index;
+            current = current.next;
+            index++;
         }
         return -1;
     }
 
     public int searchSorted(T item) {
-        Node<T> i = this.start;
-        int count = -1;
-        while (i != null) {
-            count++;
-            if (item.compareTo(i.data) > 0) {
-                i = i.nextNode;
-            } else if (item.compareTo(i.data) == 0) {
-                System.out.println(i.data + " present at node " + count);
-                return count;
-            } else {
-                System.out.println("Item not found.");
-                return -1;
-            }
+        Node<T> current = head;
+        int index = 0;
+        while (current != null) {
+            int cmp = item.compareTo(current.data);
+            if (cmp == 0) return index;
+            if (cmp < 0) return -1;
+            current = current.next;
+            index++;
         }
         return -1;
+    }
+
+    public void printList() {
+        Node<T> current = head;
+        while (current != null) {
+            System.out.print(current.data);
+            current = current.next;
+            if (current != null) System.out.print(" -> ");
+        }
+        System.out.println();
+    }
+
+    public boolean isEmpty() {
+        return this.head == null;
     }
 }

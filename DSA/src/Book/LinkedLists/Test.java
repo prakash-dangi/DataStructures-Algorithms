@@ -2,32 +2,33 @@ package Book.LinkedLists;
 
 public class Test {
     public static void main(String[] args) {
-        CircularList<Integer> list = new CircularList<>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
+        LinkedList<Integer> list = new LinkedList<>();
+        list.addStart(1);
+        list.addStart(2);
+        list.addStart(3);
+        list.deleteItem(3);
         list.printList();
 
 
 //        LinkedList<Integer> list = new LinkedList<>();
-//        list.add(1); // inserting at the start
+//        list.addStart(1); // inserting at the head
 //        list.printList();
 //        list.addEnd(2); // inserting at end
 //        list.addEnd(3);
 //        list.addEnd(5);
 //        list.printList();
-//        list.add(0); // inserting at start
+//        list.addStart(0); // inserting at head
 //        list.printList();
-//        list.add(4, 3); // inserting at the 4th node
+//        list.addStart(4, 3); // inserting at the 4th node
 //        list.printList();
 //        list.addEnd(9);
 //        list.addEnd(10);
-//        list.add(6, 5);
-//        list.add(7, 6);
-//        list.add(8, 7);
+//        list.addStart(6, 5);
+//        list.addStart(7, 6);
+//        list.addStart(8, 7);
 //        list.printList();
 //        list.searchSorted(5);
-//        int data = list.deleteNode(5);
+//        int data = list.deleteAt(5);
 //        System.out.println(data + " deleted");
 //        list.printList();
 //        list.deleteItem(10);

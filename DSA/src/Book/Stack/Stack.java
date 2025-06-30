@@ -27,7 +27,7 @@ public class Stack<T extends Comparable<T>> {
     public void push(T item) {
         if (this.stack == null) {
             assert this.linkedStack != null;
-            this.linkedStack.add(item);
+            this.linkedStack.addStart(item);
         } else {
             if (this.top == max - 1) {
                 throw new StackOverflowError();
@@ -43,7 +43,7 @@ public class Stack<T extends Comparable<T>> {
         T item;
         if (this.stack == null) {
             assert this.linkedStack != null;
-            if ((item = this.linkedStack.deleteNode(-2)) != null) {
+            if ((item = this.linkedStack.deleteAt(-2)) != null) {
                 return item;
             } else {
                 throw new EmptyStackException();
@@ -62,7 +62,7 @@ public class Stack<T extends Comparable<T>> {
     public T peek() {
         if (this.stack == null) {
             assert this.linkedStack != null;
-            return this.linkedStack.deleteNode(-1);
+            return this.linkedStack.deleteAt(-1);
         } else {
             if (this.top == -1) {
                 throw new EmptyStackException();
@@ -76,7 +76,7 @@ public class Stack<T extends Comparable<T>> {
         if (this.stack == null) {
             assert linkedStack != null;
             try {
-                this.linkedStack.deleteNode(-1);
+                this.linkedStack.deleteAt(-1);
             } catch (EmptyStackException e) {
                 return true;
             }
